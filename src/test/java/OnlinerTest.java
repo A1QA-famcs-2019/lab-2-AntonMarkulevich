@@ -8,12 +8,18 @@ import pages.OnlinerMainPage;
 import pages.PopularSections;
 import pages.SectionPage;
 
+import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 public class OnlinerTest {
+    private String login;
+    private String password;
 
     @BeforeMethod
     public void setUp() {
+        ResourceBundle testResources = ResourceBundle.getBundle("testResources");
+        login = testResources.getString("login");
+        password = testResources.getString("password");
         Browser.getDriver().manage().window().maximize();
         Browser.getDriver().manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         Browser.getDriver().get("http://onliner.by/");
@@ -24,7 +30,7 @@ public class OnlinerTest {
         WebDriverWait wait = new WebDriverWait(Browser.getDriver(), 10);
         OnlinerMainPage onlinerMainPage = new OnlinerMainPage();
         onlinerMainPage.clickLogIn();
-        new LoginForm().login(wait);
+        new LoginForm().login(login, password, wait);
         String sectionName = PopularSections.goToRandomSection(wait);
         Assert.assertEquals(new SectionPage().getSectionTitleText(), sectionName);
 
